@@ -1,9 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="css/deli-very.css">
+        <script type="text/javascript" src="js/menu.js"></script>
+        <script src="https://vuejs.org/js/vue.js"defer></script>
+        <script src="js/js_script.js" defer></script>
+        <script src="/vue/vue.js" defer></script>
+        <script src="/socket.io/socket.io.js" defer></script>
+        <script src="js/vue_script.js" defer></script>
         <title>DELI-VERY</title>
-    </head>
+   </head>
     <body>
-        <h1>Hello World!!!</h1>
+      <main id='myID'>
+
+        <section class = "headSection">
+          <div class= "headline "><h1>Welcome to BurgerHeaven Online</h1></div>
+          <img id='header'src="/img/header.jpg" alt = 'Image' height = auto width = '100%'>
+        </section>
+
+        <section class="section" id="selectburger">
+          <h2> Select burger </h2>
+          <p>This is where you execute burger selection </p>
+            <div id= 'tabell'>
+                  <ul v-for = 'burgers in menuItems'>
+                    <h3 class= "hamburgerHeadline">{{ burgers.name }} </h3>
+                    <img v-bind:src='burgers.img' >
+                    <li>Kcal: {{ burgers.kilocalories }}</li>
+                    <li v-if = 'burgers.gluten == true' class="ingrediens"> Inehåller gluten</li>
+                    <li v-if = 'burgers.laktos == true' class="ingrediens"> Inehåller laktos</li>
+                    <input type="checkbox" id = "burgers.name" v-bind:value= "burgers.name" v-model="checkedBurgers">
+                    <label for= burgers.name> {{ "Add to order" }} </label>
+                  </ul>
+                </div>
+            </section>
+
+        <section class="section">
+          <h2> Costumer information  </h2>
+          <p> This is where you provide necessary information </p>
+
+          <h3>Delivery information</h3>
+          <p>
+            <label for="First- and Last name">Full name</label><br>
+            <input v-model="flnmessage" type="text" id="First- and Last name" name="fn" required="required" placeholder="First- and Last name">
+          </p>
+          <p>
+            <label for="E-mail">E-mail adress</label><br>
+            <input v-model="mailmessage" type="text" id="E-mail adress" name="fn" required="required" placeholder="E-mail">
+          </p>
+          <p>
+            <label for="payment">Payment options</label><br>
+            <select v-model = 'paymentselected' id="payment" name="pay">
+              <option value= "credit card" >Credit card </option>
+              <option>Swish</option>
+              <option>Black</option>
+              <option>with cookies</option>
+            </select>
+          </p>
+          <p>Gender</p>
+            <input v-model="gender" type="radio" name="gender" value="male"> Male<br>
+            <input v-model="gender" type="radio" name="gender" value="female"> Female<br>
+            <input v-model="gender" type="radio" name="gender" value="other" > Other
+            </section>
+
+            <section class="section">
+              <h1> Select location in the map! </h1>
+              <a href="/dispatcher" target="_blank">Open dispatcher in new window</a>.
+              <div class="view-box">
+                <div id="dots" v-on:click="displayOrder">
+                    <div
+                      v-bind:style="{ left: details.x + 'px', top: details.y + 'px'}">
+                      T
+                    </div>
+                </div>
+              </div>
+            </section>
+
+        <section class="button">
+          <button v-on:click="addOrder" type="submit"><img src="/img/smile.png"> Place my order!</button>
+        </section>
+
+        <section class="section" v-if= "showmenue">
+          <h3> Order confirmation: </h3>
+          <h4> Customer details </h4>
+          <p> Name: {{ flnmessage }} </p>
+          <p> E-mail: {{ mailmessage }} </p>
+          <p> Deliver to: {{ details.x }} x/ {{ details.y  }} y</p>
+          <span>Payment method: {{ paymentselected }}</span><p></p>
+          <span>Gender: {{ picked }} </span><p></p>
+          <h4> Order summary </h4>
+          <ul>
+            <li v-for="b in checkedBurgers">{{b}}</li>
+          </ul>
+          </section>
+
+        <footer>
+            <hr>
+            </hr>
+          <p>&copy; 2019 Hypothetical Burgers Inc. </p>
+        </footer>
+
+      </main>
     </body>
 </html>
